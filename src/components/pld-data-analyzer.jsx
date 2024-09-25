@@ -47,7 +47,7 @@ const PldDataAnalyzer = () => {
             <p className="mt-4 text-xl text-gray-300">
               {isDragActive
                 ? "Drop the file here"
-                : "Drag 'n' drop a PLD file here, or click to select a file"}
+                : "Drag and drop a PLD file here, or click to select a file"}
             </p>
           </div>
           <Button
