@@ -13,7 +13,6 @@ import {
 } from "recharts";
 import { Percent } from "lucide-react";
 import { COLORS } from "./utils";
-// import { COLORS } from "(components)/utils";
 
 export const RateAnalysis = ({ data }) => {
   const rateIncreaseData = Object.keys(data.rateOfIncrease.base_rate).map(

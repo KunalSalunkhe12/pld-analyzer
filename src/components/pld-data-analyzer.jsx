@@ -1,48 +1,86 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { Overview } from "./overview";
 import { FutureProjections } from "./future-projections";
 import { RateAnalysis } from "./rate-analysis";
-import { data } from "./utils";
+import { data as initialData } from "./utils";
+import { useDropzone } from "react-dropzone";
+import { Upload } from "lucide-react";
 
 const PldDataAnalyzer = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const [data, setData] = useState(null);
+
+  const onDrop = useCallback((acceptedFiles) => {
+    // Handle file upload here
+    console.log(acceptedFiles);
+    // For this example, we'll just use the initial data
+    setData(initialData);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold text-white">PLD Data Analyzer</h1>
-      </div>
+      <h1 className="text-4xl font-bold text-white text-center mb-8">
+        PLD Data Analyzer
+      </h1>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
-        <TabsList className="bg-gray-800 border-gray-700">
-          <TabsTrigger
-            value="overview"
-            className="data-[state=active]:bg-blue-500 data-[state=active]:text-white text-white"
+      {!data && (
+        <div className="flex flex-col items-center justify-center h-[60vh]">
+          <div
+            {...getRootProps()}
+            className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center cursor-pointer hover:border-blue-500 transition-colors duration-300"
           >
-            Overview
-          </TabsTrigger>
-          <TabsTrigger
-            value="future-projections"
-            className="data-[state=active]:bg-blue-500 data-[state=active]:text-white text-white"
+            <input {...getInputProps()} />
+            <Upload className="mx-auto h-12 w-12 text-gray-400" />
+            <p className="mt-4 text-xl text-gray-300">
+              {isDragActive
+                ? "Drop the file here"
+                : "Drag 'n' drop a PLD file here, or click to select a file"}
+            </p>
+          </div>
+          <Button
+            onClick={() => setData(initialData)}
+            className="mt-8 bg-blue-600 hover:bg-blue-700"
           >
-            Future Projections
-          </TabsTrigger>
-          <TabsTrigger
-            value="rate-analysis"
-            className="data-[state=active]:bg-blue-500 data-[state=active]:text-white text-white"
-          >
-            Rate Analysis
-          </TabsTrigger>
-        </TabsList>
+            Analyze PLD File
+          </Button>
+        </div>
+      )}
 
-        {activeTab === "overview" && <Overview data={data} />}
-        {activeTab === "future-projections" && (
-          <FutureProjections data={data} />
-        )}
+      {data && (
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+          <TabsList className="bg-gray-800 border-gray-700">
+            <TabsTrigger
+              value="overview"
+              className="data-[state=active]:bg-blue-500 data-[state=active]:text-white text-white"
+            >
+              Overview
+            </TabsTrigger>
+            <TabsTrigger
+              value="future-projections"
+              className="data-[state=active]:bg-blue-500 data-[state=active]:text-white text-white"
+            >
+              Future Projections
+            </TabsTrigger>
+            <TabsTrigger
+              value="rate-analysis"
+              className="data-[state=active]:bg-blue-500 data-[state=active]:text-white text-white"
+            >
+              Rate Analysis
+            </TabsTrigger>
+          </TabsList>
 
-        {activeTab === "rate-analysis" && <RateAnalysis data={data} />}
-      </Tabs>
+          {activeTab === "overview" && <Overview data={data} />}
+          {activeTab === "future-projections" && (
+            <FutureProjections data={data} />
+          )}
+
+          {activeTab === "rate-analysis" && <RateAnalysis data={data} />}
+        </Tabs>
+      )}
     </div>
   );
 };
