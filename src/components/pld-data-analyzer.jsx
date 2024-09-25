@@ -6,20 +6,28 @@ import { FutureProjections } from "./future-projections";
 import { RateAnalysis } from "./rate-analysis";
 import { data as initialData } from "./utils";
 import { useDropzone } from "react-dropzone";
-import { Upload } from "lucide-react";
+import { Upload, Loader2 } from "lucide-react";
 
 const PldDataAnalyzer = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
     // Handle file upload here
     console.log(acceptedFiles);
-    // For this example, we'll just use the initial data
-    setData(initialData);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  const handleAnalyze = () => {
+    setIsLoading(true);
+    // Simulate API call or file processing
+    setTimeout(() => {
+      setData(initialData);
+      setIsLoading(false);
+    }, 2000); // 2 seconds delay to simulate processing
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
@@ -35,6 +43,7 @@ const PldDataAnalyzer = () => {
           >
             <input {...getInputProps()} />
             <Upload className="mx-auto h-12 w-12 text-gray-400" />
+
             <p className="mt-4 text-xl text-gray-300">
               {isDragActive
                 ? "Drop the file here"
@@ -42,10 +51,18 @@ const PldDataAnalyzer = () => {
             </p>
           </div>
           <Button
-            onClick={() => setData(initialData)}
+            onClick={handleAnalyze}
             className="mt-8 bg-blue-600 hover:bg-blue-700"
+            disabled={isLoading}
           >
-            Analyze PLD File
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Analyzing...
+              </>
+            ) : (
+              "Analyze PLD File"
+            )}
           </Button>
         </div>
       )}
