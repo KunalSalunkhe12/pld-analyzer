@@ -7,6 +7,7 @@ import { RateAnalysis } from "./rate-analysis";
 import { data as initialData } from "./utils";
 import { useDropzone } from "react-dropzone";
 import { Upload, Loader2 } from "lucide-react";
+import FileUpload from "./file-upload";
 
 const PldDataAnalyzer = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -37,20 +38,8 @@ const PldDataAnalyzer = () => {
 
       {!data && (
         <div className="flex flex-col items-center justify-center h-[60vh]">
-          <div
-            {...getRootProps()}
-            className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center cursor-pointer hover:border-blue-500 transition-colors duration-300"
-          >
-            <input {...getInputProps()} />
-            <Upload className="mx-auto h-12 w-12 text-gray-400" />
-
-            <p className="mt-4 text-xl text-gray-300">
-              {isDragActive
-                ? "Drop the file here"
-                : "Drag and drop a PLD file here, or click to select a file"}
-            </p>
-          </div>
-          <Button
+          <FileUpload onFileUpload={handleAnalyze} />
+          {/* <Button
             onClick={handleAnalyze}
             className="mt-8 bg-blue-600 hover:bg-blue-700"
             disabled={isLoading}
@@ -63,7 +52,7 @@ const PldDataAnalyzer = () => {
             ) : (
               "Analyze PLD File"
             )}
-          </Button>
+          </Button> */}
         </div>
       )}
 
