@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UploadIcon } from "lucide-react";
 
-const FileUpload = ({ onFileUpload }) => {
+const FileUpload = ({ onFileUpload, isLoading }) => {
   const onDrop = useCallback(
     (acceptedFiles) => {
       if (acceptedFiles.length > 0) {
@@ -37,7 +37,7 @@ const FileUpload = ({ onFileUpload }) => {
           className="w-full mt-4 bg-[#4299E1] hover:bg-[#2B6CB0]"
           onClick={() => document.querySelector("input").click()}
         >
-          Select File
+          {isLoading ? "Analyzing.." : "Select a File"}
         </Button>
       </CardContent>
     </Card>
